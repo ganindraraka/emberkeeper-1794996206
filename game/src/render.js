@@ -36,6 +36,7 @@ function forestLayout() {
   return forest;
 }
 
+/** Create the canvas renderer and its frame-drawing interface. */
 export function createRenderer(canvas) {
   const ink = canvas.getContext('2d');
   const view = { scale: 1, x: 0, y: 0, centerX: FIELD.width / 2, centerY: HEARTH.y };
@@ -317,10 +318,8 @@ export function createRenderer(canvas) {
       const done = wave < state.wave;
       const here = wave === state.wave;
       ink.fillStyle = done ? PALETTE.flame : here ? PALETTE.ember : '#38436a';
-      ink.beginPath();
       const radius = here ? 9 : 7;
-      ink.arc(pipStart + (wave - 1) * pipGap, pipY, radius, 0, FULL_TURN);
-      ink.fill();
+      fillCircle(pipStart + (wave - 1) * pipGap, pipY, radius, 0, FULL_TURN);
     }
     text('WAVES', FIELD.width - 40, 142, 16, PALETTE.muted, 'right', '600');
     text(waveLabel(`${state.wave} of ${WAVE.last}`), FIELD.width - 40 - (WAVE.last - 1) * pipGap - 16, pipY + 6, 18, PALETTE.text, 'right', '600');
@@ -392,6 +391,7 @@ export function createRenderer(canvas) {
 
   const sceneLayers = [paintGround, paintFire, paintGuard, paintDrifters, paintParticles];
 
+  /** Draw the world, HUD, and active screen overlay for one frame. */
   function draw(state, screen, best, startedThisRun) {
     ink.setTransform(1, 0, 0, 1, 0, 0);
     ink.fillStyle = PALETTE.night;
