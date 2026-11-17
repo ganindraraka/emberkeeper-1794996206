@@ -36,3 +36,5 @@ node serve.ts
 ```
 
 Then open [http://localhost:8080](http://localhost:8080) in a desktop browser to play.
+
+Screenshots: `screenshots/1-start.jpg` shows the title, `screenshots/2-play.jpg` shows active play, `screenshots/3-dawn.jpg` shows victory at dawn, and `screenshots/4-out.jpg` shows the fire-out ending.
