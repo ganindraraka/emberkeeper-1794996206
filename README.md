@@ -13,6 +13,8 @@ Survive all ten waves to reach dawn, or the fire burns out.
 
 ## Play
 
+The game is a single self-contained page with no network request.
+
 Open `game/index.html` in a desktop browser. No build step, no network request.
 
 - **A / D** or **← / →** or the mouse — swing the shield
