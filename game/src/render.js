@@ -299,7 +299,7 @@ export function createRenderer(canvas) {
   }
 
   function drawFlameBar(state) {
-    // The hearth's flame, top centre: the run's life, with a notch at the burnout line.
+    // Draw the hearth's remaining flame in the top-centre life bar.
     const pct = Math.max(0, Math.min(1, state.flame / HEARTH.flameMax));
     context.fillStyle = PALETTE.bar;
     roundRect(BAR.x, BAR.y, BAR.width, BAR.height, 11);
@@ -325,13 +325,14 @@ export function createRenderer(canvas) {
     context.closePath();
   }
 
-  function drawHud(state) {
-    context.textBaseline = 'alphabetic';
-    drawFlameBar(state);
+  function drawScore(state) {
+    // Draw the rounded score and its label at the top left.
     text(scoreLabel(Math.round(state.score)), 28, 118, 40, PALETTE.text, 'left', '700');
     text('SCORE', 28, 142, 16, PALETTE.muted, 'left', '600');
+  }
 
-    // wave pips, so the run's length is visible
+  function drawWaves(state) {
+    // Draw wave progress pips and the current wave label at the top right.
     const pipY = 108;
     const pipGap = 22;
     const pipStart = FIELD.width - 40 - (WAVE.last - 1) * pipGap;
@@ -346,8 +347,10 @@ export function createRenderer(canvas) {
     }
     text('WAVES', FIELD.width - 40, 142, 16, PALETTE.muted, 'right', '600');
     text(waveLabel(`${state.wave} of ${WAVE.last}`), FIELD.width - 40 - (WAVE.last - 1) * pipGap - 16, pipY + 6, 18, PALETTE.text, 'right', '600');
+  }
 
-    // chain multiplier bottom left, when it is more than one
+  function drawChain(state) {
+    // Draw an active chain multiplier and its remaining time at the bottom left.
     if (state.chain > 1) {
       text(chainLabel(`${state.chain}`), 28, FIELD.height - 30, 34, PALETTE.ember, 'left', '700');
       text(`CHAIN  ${CHAIN_MAX} max`, 28 + 60, FIELD.height - 30, 16, PALETTE.muted, 'left', '600');
@@ -356,12 +359,25 @@ export function createRenderer(canvas) {
       roundRect(28, FIELD.height - 20, Math.max(0, width), 6, 3);
       context.fill();
     }
+  }
 
-    // controls reminder, bottom right
+  function drawControls() {
+    // Draw the controls reminder at the bottom right.
     text('A D or \u2190 \u2192  swing the shield   \u00b7   SPACE  dash   \u00b7   P  pause   \u00b7   M  mute', FIELD.width - 28, FIELD.height - 24, 17, PALETTE.muted, 'right', '500');
   }
 
+  function drawHud(state) {
+    // Draw the score, flame, waves, active chain and controls around the clearing.
+    context.textBaseline = 'alphabetic';
+    drawFlameBar(state);
+    drawScore(state);
+    drawWaves(state);
+    drawChain(state);
+    drawControls();
+  }
+
   function drawPanel(title, titleColor, lines, lineColors, prompt) {
+    // Draw a centred screen panel with its heading, message lines and pulsing prompt.
     const height = PANEL.top + lines.length * PANEL.line + PANEL.bottom;
     const x = (FIELD.width - PANEL.width) / 2;
     const y = (FIELD.height - height) / 2;
